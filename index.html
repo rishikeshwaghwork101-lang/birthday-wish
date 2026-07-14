@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! 🎉</title>
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="A special interactive birthday wish created just for you. Open the letter to read your birthday wishes!">
+  
+  <!-- Font Awesome & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Outfit:wght@300;400;600;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Countdown Lock Screen Overlay -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-overlay"></div>
+    <div class="lock-content">
+      <h2 class="lock-title">Persia's Birthday Countdown</h2>
+      <div class="timer-grid">
+        <div class="timer-box">
+          <span class="timer-num" id="days">00</span>
+          <span class="timer-label">Days</span>
+        </div>
+        <div class="timer-box">
+          <span class="timer-num" id="hours">00</span>
+          <span class="timer-label">Hours</span>
+        </div>
+        <div class="timer-box">
+          <span class="timer-num" id="minutes">00</span>
+          <span class="timer-label">Mins</span>
+        </div>
+        <div class="timer-box">
+          <span class="timer-num" id="seconds">00</span>
+          <span class="timer-label">Secs</span>
+        </div>
+      </div>
+      <p class="lock-sub">Wait for midnight to unlock the surprise...</p>
+      <button class="skip-timer-btn" id="skipTimerBtn">Preview Surprise ✨</button>
+    </div>
+  </div>
+
+  <!-- Background Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Interactive Background Balloons Container -->
+  <div id="balloonContainer"></div>
+
+  <!-- Music Widget -->
+  <div class="music-widget" id="musicWidget">
+    <button class="music-toggle" id="musicToggleBtn" aria-label="Toggle Music">
+      <i class="fas fa-play" id="musicIcon"></i>
+    </button>
+    <div class="music-info">
+      <span class="music-title">Birthday Melodies</span>
+      <span class="music-status" id="musicStatus">Paused</span>
+    </div>
+    <!-- Hidden Audio element (royalty free birthday track) -->
+    <audio id="bgMusic" loop src="https://assets.codepen.io/148866/happy-birthday.mp3" preload="auto"></audio>
+  </div>
+
+  <!-- Main Container -->
+  <main class="app-container">
+    
+    <!-- Top Header Message (Pre-open) -->
+    <header class="intro-header" id="introHeader">
+      <h1 class="glow-text">Happy Birthday, Persia! 🎂✨</h1>
+      <p class="subtitle">Click the envelope below to open your surprise letter</p>
+    </header>
+
+    <!-- 3D Envelope Wrapper -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+      <div class="envelope" id="envelope">
+        <!-- Flap of the envelope -->
+        <div class="envelope-flap" id="envelopeFlap"></div>
+        <!-- Pocket / Back of the envelope -->
+        <div class="envelope-pocket"></div>
+         <!-- The Dummy Letter (slides out as preview) -->
+        <article class="letter" id="letterPreview">
+          <div class="letter-paper">
+            <div class="paper-header">
+              <span class="date-stamp">15 July 2026</span>
+            </div>
+            <div class="paper-content">
+              <section class="handwritten-section">
+                <h2 class="handwritten-title" style="font-size: 1.4rem; color:#be123c;">To Persia... ❤️</h2>
+                <p class="handwritten-paragraph" style="font-size: 1.1rem; line-height: 20px;">
+                  I'm really glad that I get to be a small piece of your big life...
+                </p>
+                <p class="handwritten-paragraph" style="font-size: 1rem; line-height: 20px; color:#8b8982;">
+                  (Click to read the full letter)
+                </p>
+              </section>
+            </div>
+          </div>
+        </article>
+
+        <!-- Front Left/Right flaps overlaying the letter inside the pocket -->
+        <div class="envelope-front"></div>
+        
+        <!-- Wax Seal (Click to Open) -->
+        <button class="wax-seal" id="waxSeal" aria-label="Open Birthday Envelope">
+          <span class="seal-heart">❤</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Celebration Controls (Appear after opening) -->
+    <div class="celebration-controls" id="celebrationControls">
+      <button class="btn btn-primary" id="confettiBtn">
+        <i class="fas fa-gift"></i> More Confetti!
+      </button>
+      <button class="btn btn-secondary" id="balloonSpawnBtn">
+        <i class="fas fa-wind"></i> Release Balloons
+      </button>
+      <p class="hint-text">Tip: Try clicking/tapping the floating balloons to pop them! 🎈</p>
+    </div>
+
+    <!-- Interactive Birthday Cake (Visible after letter modal closes) -->
+    <section class="cake-section" id="cakeSection">
+      <h2 class="cake-prompt">Make a wish! Tap each candle to blow it out 🕯️</h2>
+      
+      <div class="cake-container">
+        <!-- The Cake Structure -->
+        <div class="cake">
+          <div class="cake-layer cake-layer-bottom"></div>
+          <div class="cake-layer cake-layer-middle"></div>
+          <div class="cake-layer cake-layer-top"></div>
+          <div class="icing"></div>
+          <div class="drips"></div>
+          
+          <!-- Interactive Candles -->
+          <div class="candles-container">
+            <div class="candle" id="candle-1">
+              <div class="flame"></div>
+              <div class="smoke"></div>
+            </div>
+            <div class="candle" id="candle-2">
+              <div class="flame"></div>
+              <div class="smoke"></div>
+            </div>
+            <div class="candle" id="candle-3">
+              <div class="flame"></div>
+              <div class="smoke"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hidden Grand Finale Wish Message -->
+      <div class="cake-wish" id="cakeWish">
+        <h3 class="glow-text-gold">Happy Birthday, Persia! 🎉</h3>
+        <p>May this year give you everything you deserve, countless stories to write, and infinite reasons to smile! ❤️🎂✨</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Letter Modal (Centering full message) -->
+  <div class="letter-modal" id="letterModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <button class="close-modal-btn" id="closeModalBtn" aria-label="Close Letter">&times;</button>
+      <div class="letter-paper">
+        <div class="paper-header">
+          <span class="date-stamp" id="currentDate">15 July 2026</span>
+        </div>
+        <div class="paper-content">
+          <!-- Personalized Handwritten Section -->
+          <section class="handwritten-section">
+            <h2 class="handwritten-title">Happy Birthday Girl, Persia. ❤️</h2>
+            
+            <p class="handwritten-paragraph">
+              I'm really glad that I get to be a small piece of your big life.
+            </p>
+            <p class="handwritten-paragraph">
+              You know, one of the things I admire most about you is that you were always up for helping me. You're amazing just being yourself, whether you're being expressive, writing poetry, laughing at the most lame jokes, being completely chaotic, or being brutally honest. There is something refreshing about people who don't spend their lives trying to become someone else. You're one of those people.
+            </p>
+            <p class="handwritten-paragraph">
+              You have this beautiful heart, it's rare, really rare in people nowadays. I genuinely hope you never lose that.
+            </p>
+            <p class="handwritten-paragraph">
+              I hope you keep writing poems, even the ones you think aren't good enough. I hope you keep reading books that make you think. I hope you keep questioning things, feeling deeply, and speaking your mind the way you always do.
+            </p>
+            <p class="handwritten-paragraph">
+              You have this habit of making people comfortable enough to be themselves. It's one of your biggest strengths. Conversations with you rarely stay superficial. They somehow end up becoming meaningful, and I think that's a gift.
+            </p>
+            <p class="handwritten-paragraph">
+              Thank you for every conversation we've had, whether it was about books, poetry, life, random nonsense, or just making each other laugh. Thank you for your honesty, even when it wasn't the easiest thing to say. Thank you for believing in people you care about and encouraging them to become better versions of themselves.
+            </p>
+            <p class="handwritten-paragraph">
+              You've reminded me more than once that not everyone has an ulterior motive to be kind to others. Sometimes it just needs someone who believes you'll get there.
+            </p>
+            <p class="handwritten-paragraph">
+              You're genuinely a wonderful friend, and I hope you know how valuable that is. People often underestimate how much one good friend can change someone's life. Whether you realise it or not, you've made a meaningful difference in mine.
+            </p>
+            <p class="handwritten-paragraph">
+              I hope this year gives you everything you deserve—peace when you need it, adventures when you're ready for them, stories worth writing, books worth remembering, people who value your heart, and countless reasons to smile, giggle, and laugh like maniacs.
+            </p>
+            <p class="handwritten-paragraph">
+              Keep being the wonderfully weird, thoughtful, expressive, kind-hearted, and beautifully imperfect person you are. That's the version of you the world needs.
+            </p>
+            <p class="handwritten-paragraph">
+              Happy Birthday once again, Persia. May this year be kinder to you than the last, and may you always have the courage to remain exactly who you are.
+            </p>
+            
+            <div class="handwritten-signature">
+              <p>With lots of love and good wishes,</p>
+              <p class="signature-name">Rishi..</p>
+            </div>
+          </section>
+
+          <!-- Birthday Illustration Decoration -->
+          <div class="letter-illustration">
+            <img src="assets/birthday_illustration.jpg" alt="Happy Birthday Illustration" class="illustration-img">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas Confetti Library CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
